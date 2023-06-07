@@ -1,7 +1,13 @@
-import { Box, TextField, Button, styled } from "@mui/material";
-import { useState } from "react";
+import { Box, TextField, Button, styled, Typography } from "@mui/material";
+import { useState, useContext } from "react";
 
-const imageUrl = "https://i.ibb.co/g7GDHq5/logo-no-background.png";
+// API
+import { API } from "../../service/api.js";
+
+import { DataContext } from "../../context/DataProvider.jsx";
+import { useNavigate } from "react-router-dom";
+
+// Styled Components form MUI
 
 const Component = styled(Box)`
     margin-top:30px;
@@ -39,12 +45,110 @@ const SignUpButton = styled(Button)`
     color:#2874f0;
 `;
 
-const Login = () => {
+const Error = styled(Typography)`
+  /*  font-size: 10px; */
+    color:#ff6161;
+    line-height:0;
+    margin-top:10px;
+    font-weight:600; 
 
+`
+
+// Object to Store SignUp Values
+
+let signupInitialValues = {
+    name: "",
+    username: "",
+    password: ""
+}
+
+// Object to Store Login Values
+
+let loginInitialValues = {
+    username: "",
+    password: ""
+}
+
+// Login Component 
+
+const Login = () => {
+    const imageUrl = "https://i.ibb.co/g7GDHq5/logo-no-background.png";
+
+    // Hook to switch between login and signup when create an account button is clicked.
     const [account, toggleAccount] = useState('login');
+
+    // Hook to capture signup values
+    const [signup, setSignup] = useState(signupInitialValues);
+
+    // Hook to display error 
+    const [error, setError] = useState('');
+
+    // Hook to capture login Values
+    const [login, setLogin] = useState(loginInitialValues);
+
+    // Hook to store data in context
+    const { setAccount } = useContext(DataContext);
+
     const toggleSignUp = () => {
         account === 'signup' ? toggleAccount('login') : toggleAccount('signup');
     }
+
+    // Function to capture data from signUp input fields
+    const onInputChange = (e) => {
+        setSignup({ ...signup, [e.target.name]: e.target.value });
+    }
+
+    const onValueChange = (e) => {
+        setLogin({ ...login, [e.target.name]: e.target.value })
+    }
+
+    // Function to store the entered data in the signup input fields to database
+
+    const signupUser = async () => {
+        // Field Validation
+        if (!signup.name || !signup.username || !signup.password) {
+            setError('Please fill in all fields.');
+            return;
+        }
+
+        let response = await API.userSignup(signup);
+        if (response.isSuccess) {
+            setError('');
+            setSignup(signupInitialValues);
+            toggleAccount('login');
+        }
+        else {
+            setError('Something Went Wrong!!')
+        }
+    }
+
+
+    // Function For Login The User
+    const navigate = useNavigate();
+    const loginUser = async () => {
+        // Field Validation
+        if (!login.username || !login.password) {
+            setError('Please Fill in All Fields');
+            return;
+        }
+
+        let response = await API.userLogin(login);
+
+        if (response.isSuccess) {
+            setError('');
+
+            sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+            sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+
+            setAccount({ username: response.data.username, name: response.data.name });
+            navigate('/');
+        }
+        else {
+            setError('Something Went Wrong !!');
+        }
+
+    }
+
     return (
         <Component>
             <Box>
@@ -52,18 +156,30 @@ const Login = () => {
 
                 {account === 'login' ?
                     <Wrapper>
-                        <TextField variant="standard" label="username" />
-                        <TextField variant="standard" label="password" />
-                        <LoginButton variant="contained">Login</LoginButton>
+                        <TextField required variant="standard" value={login.username} onChange={(e) => onValueChange(e)} name="username" label="username" />
+
+                        <TextField required variant="standard" value={login.password} onChange={(e) => onValueChange(e)} name="password" label="password" type="password" />
+
+                        <LoginButton variant="contained" onClick={() => loginUser()}>Login </LoginButton>
+
+                        {error && <Error>{error}</Error>}
+
                         <SignUpButton variant="text" onClick={toggleSignUp}>Create An Account</SignUpButton>
                     </Wrapper>
                     :
                     <Wrapper>
-                        <TextField variant="standard" label="Enter Your Name" />
-                        <TextField variant="standard" label="Enter Username" />
-                        <TextField variant="standard" label="Enter Password" />
-                        <SignUpButton >SignUp</SignUpButton>
-                        <LoginButton variant="contained" onClick={toggleSignUp}>Already Have An Account</LoginButton>
+                        <TextField variant="standard" onChange={(e) => onInputChange(e)} label="Enter Your Name" name="name" />
+
+                        <TextField variant="standard" onChange={(e) => onInputChange(e)} label="Enter Username" name="username" />
+
+                        <TextField variant="standard" onChange={(e) => onInputChange(e)} label="Enter Password" name="password" type="password" />
+
+
+                        {error && <Error>{error}</Error>}
+
+                        <SignUpButton onClick={() => signupUser()}>SignUp</SignUpButton>
+
+                        <LoginButton variant="contained" onClick={toggleSignUp}> Already Have An Account</LoginButton>
                     </Wrapper>}
             </Box>
         </Component>
