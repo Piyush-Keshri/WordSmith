@@ -71,7 +71,7 @@ let loginInitialValues = {
 
 // Login Component 
 
-const Login = () => {
+const Login = ({ isUserAuthenticated }, { handleLogin }) => {
     const imageUrl = "https://i.ibb.co/g7GDHq5/logo-no-background.png";
 
     // Hook to switch between login and signup when create an account button is clicked.
@@ -125,6 +125,8 @@ const Login = () => {
 
     // Function For Login The User
     const navigate = useNavigate();
+
+
     const loginUser = async () => {
         // Field Validation
         if (!login.username || !login.password) {
@@ -141,10 +143,16 @@ const Login = () => {
             sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
 
             setAccount({ username: response.data.username, name: response.data.name });
+            isUserAuthenticated(true);
             navigate('/');
         }
         else {
-            setError('Something Went Wrong !!');
+            if (response.msg === 'Username does not match' || response.msg === 'Password does not match') {
+                setError('Username or password is incorrect');
+                return;
+            } else {
+                setError('Something Went Wrong !!');
+            }
         }
 
     }
