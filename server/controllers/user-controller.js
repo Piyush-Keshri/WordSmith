@@ -48,4 +48,5 @@ export const loginUser = async (request, response) => {
     } catch (error) {
         response.status(500).json({ msg: 'error while login the user' })
     }
-}   
+}
+

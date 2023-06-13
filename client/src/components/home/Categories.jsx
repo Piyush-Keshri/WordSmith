@@ -21,6 +21,8 @@ const StyledLink = styled(Link)`
 `;
 
 const Categories = () => {
+
+    // Custom hook to append category in the URL
     const [searchParams] = useSearchParams();
     const category = searchParams.get('category');
 

@@ -2,17 +2,17 @@ import { styled, Box, Typography } from '@mui/material';
 
 const Image = styled(Box)`
     width: 100%;
-    background: url(https://i.ibb.co/tzSQf6Y/23964.jpg);
-    background-repeat: no-repeat;
+    background: url(https://i.ibb.co/QcsVfv0/dark-background-abstract-background-network-3d-background-7680x4320-8324.png);
     height: 40vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; 
 `;
 
 const Heading = styled(Typography)`
     font: italic 3.2em "Fira Sans", serif;
+    margin: auto;
     color: #FFFFFF;
     line-height: 1
 `;
