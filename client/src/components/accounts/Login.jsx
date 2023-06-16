@@ -136,6 +136,11 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
 
         let response = await API.userLogin(login);
 
+        if (response.msg === "Username does not match" || response.msg === 'Password does not match') {
+            setError('Username or password is incorrect');
+            return;
+        }
+
         if (response.isSuccess) {
             setError('');
 
@@ -147,14 +152,8 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
             navigate('/');
         }
         else {
-            if (response.msg === 'Username does not match' || response.msg === 'Password does not match') {
-                setError('Username or password is incorrect');
-                return;
-            } else {
-                setError('Something Went Wrong !!');
-            }
+            setError('Something Went Wrong !!');
         }
-
     }
 
     return (
@@ -167,10 +166,10 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
                         <TextField required variant="standard" value={login.username} onChange={(e) => onValueChange(e)} name="username" label="username" />
 
                         <TextField required variant="standard" value={login.password} onChange={(e) => onValueChange(e)} name="password" label="password" type="password" />
-
+                        {error && <Error>{error}</Error>}
                         <LoginButton variant="contained" onClick={() => loginUser()}>Login </LoginButton>
 
-                        {error && <Error>{error}</Error>}
+
 
                         <SignUpButton variant="text" onClick={toggleSignUp}>Create An Account</SignUpButton>
                     </Wrapper>

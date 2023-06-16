@@ -22,18 +22,20 @@ export const API_NOTIFICATION_MESSAGES = {
     }
 }
 
-// API Service Call
-// Sample Request
-// NEED SERVICE CALL : {url : '/', method:'POST/GET/PUT/DELETE' , params:true/false, query:true//false}
-
+// API SERVICE URL
+// SAMPLE REQUEST
+// NEED SERVICE CALL: { url: "/", method: "POST/GET/PUT/DELETE" }
 export const SERVICE_URLS = {
-
-    userSignup: { url: '/signup', method: 'POST' },
     userLogin: { url: '/login', method: 'POST' },
-    uploadFile: { url: '/file/upload', method: 'POST' },
-    createPost: { url: '/create', method: 'POST' },
+    userSignup: { url: '/signup', method: 'POST' },
     getAllPosts: { url: '/posts', method: 'GET', params: true },
-    getPostById: { url: '/post', method: 'GET', query: true },
-    updatePost: { url: '/update', method: 'PUT', query: true },
-    deletePost: { url: '/delete', method: 'DELETE', query: true },
+    getRefreshToken: { url: '/token', method: 'POST' },
+    uploadFile: { url: 'file/upload', method: 'POST' },
+    createPost: { url: 'create', method: 'POST' },
+    deletePost: { url: 'delete', method: 'DELETE', query: true },
+    getPostById: { url: 'post', method: 'GET', query: true },
+    newComment: { url: '/comment/new', method: 'POST' },
+    getAllComments: { url: 'comment', method: 'GET', query: true },
+    deleteComment: { url: 'comment/delete', method: 'DELETE', query: true },
+    updatePost: { url: 'update', method: 'PUT', query: true }
 }

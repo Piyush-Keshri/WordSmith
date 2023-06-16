@@ -27,19 +27,20 @@ const Posts = () => {
 
     return (
         <>
-            {
-                posts?.length ? posts.map(post => (
-                    <Grid item lg={3} sm={4} xs={12}>
+            {posts?.length ? (
+                posts.map(post => (
+                    <Grid item lg={3} sm={4} xs={12} key={post._id}>
                         <Link style={{ textDecoration: 'none', color: 'inherit' }} to={`details/${post._id}`}>
-                            <Post key={post._id} post={post} />
+                            <Post post={post} />
                         </Link>
                     </Grid>
-                )) : <Box style={{ color: '878787', margin: '30px 80px', fontSize: 18 }}>
-                    No data is available for selected category
+                ))
+            ) : (
+                <Box style={{ color: '#878787', margin: '30px 80px', fontSize: 18 }}>
+                    No data is available for the selected category
                 </Box>
-            }
+            )}
         </>
-    )
+    );
 }
-
 export default Posts;
