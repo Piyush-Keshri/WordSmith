@@ -26,6 +26,7 @@ export const API_NOTIFICATION_MESSAGES = {
 // SAMPLE REQUEST
 // NEED SERVICE CALL: { url: "/", method: "POST/GET/PUT/DELETE" }
 export const SERVICE_URLS = {
+    // fetch: "http://loclhost:8000",
     userLogin: { url: '/login', method: 'POST' },
     userSignup: { url: '/signup', method: 'POST' },
     getAllPosts: { url: '/posts', method: 'GET', params: true },
@@ -37,5 +38,6 @@ export const SERVICE_URLS = {
     newComment: { url: '/comment/new', method: 'POST' },
     getAllComments: { url: 'comment', method: 'GET', query: true },
     deleteComment: { url: 'comment/delete', method: 'DELETE', query: true },
-    updatePost: { url: 'update', method: 'PUT', query: true }
+    updatePost: { url: 'update', method: 'PUT', query: true },
+    logout: { url: '/logout', method: 'POST' }
 }

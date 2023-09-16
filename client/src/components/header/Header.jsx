@@ -1,5 +1,6 @@
-import { AppBar, Toolbar, styled } from "@mui/material";
-import { Link } from "react-router-dom";
+import { AppBar, Toolbar, styled, Button } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { API } from "../../service/api";
 const Component = styled(AppBar)`
 background:#FFFFFF;
 color:#000;
@@ -17,6 +18,11 @@ justify-content: center;
 
 
 const Header = () => {
+    const navigate = useNavigate();
+    const logout = async () => {
+        sessionStorage.clear();
+        navigate('/login');
+    }
 
     return (
         <Component>
@@ -24,7 +30,7 @@ const Header = () => {
                 <Link to='/'>HOME</Link>
                 <Link to='/about'>ABOUT</Link>
                 <Link to='/contact'>CONTACT</Link>
-                <Link to='/login'>LOGOUT</Link>
+                <Button variant="text" onClick={logout}>LOGOUT</Button>
             </Container>
         </Component>
     )

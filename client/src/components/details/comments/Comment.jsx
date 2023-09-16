@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 import { Typography, Box, styled } from "@mui/material";
-import { Delete } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import { API } from '../../../service/api';
 import { DataContext } from "../../../context/DataProvider";
@@ -28,25 +28,31 @@ const StyledDate = styled(Typography)`
     color: #878787;
 `;
 
-const DeleteIcon = styled(Delete)`
+const Delete = styled(DeleteIcon)`
     margin-left: auto;
 `;
 
 const Comment = ({ comment, setToggle }) => {
-
-    const { account } = useContext(DataContext)
+    const { account } = useContext(DataContext);
 
     const removeComment = async () => {
-        await API.deleteComment(comment._id);
-        setToggle(prev => !prev);
-    }
+        try {
+            // Attempt to delete the comment
+            await API.deleteComment(comment._id);
+            // If successful, update the state to trigger a re-render
+            setToggle(prev => !prev);
+        } catch (error) {
+            // Handle any errors here, e.g., log the error or show a user-friendly message
+            console.error("Error deleting comment:", error);
+        }
+    };
 
     return (
         <Component>
             <Container>
                 <Name>{comment.name}</Name>
                 <StyledDate>{new Date(comment.date).toDateString()}</StyledDate>
-                {comment.name === account.username && <DeleteIcon onClick={() => removeComment()} />}
+                {comment.name === account.username && <Delete onClick={() => removeComment()} />}
             </Container>
             <Typography>{comment.comments}</Typography>
         </Component>

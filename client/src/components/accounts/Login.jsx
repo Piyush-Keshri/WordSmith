@@ -106,8 +106,8 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
 
     const signupUser = async () => {
         // Field Validation
-        if (!signup.name || !signup.username || !signup.password) {
-            setError('Please fill in all fields.');
+        if (signup.name.trim().length <= 0 || signup.username.trim().length <= 0 || signup.password.trim().length <= 0) {
+            alert('Please Enter valid values');
             return;
         }
 
@@ -126,33 +126,39 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
     // Function For Login The User
     const navigate = useNavigate();
 
-
     const loginUser = async () => {
+
         // Field Validation
         if (!login.username || !login.password) {
             setError('Please Fill in All Fields');
             return;
         }
 
-        let response = await API.userLogin(login);
-
-        if (response.msg === "Username does not match" || response.msg === 'Password does not match') {
-            setError('Username or password is incorrect');
-            return;
-        }
+        const response = await API.userLogin(login);
+        console.log(response);
+        // if (response.status === 400) {
+        //     alert('Username or password is incorrect');
+        //     return;
+        // }
 
         if (response.isSuccess) {
-            setError('');
+            if (response.data.status) {
+                setError('');
 
-            sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
-            sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+                sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+                sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
 
-            setAccount({ username: response.data.username, name: response.data.name });
-            isUserAuthenticated(true);
-            navigate('/');
+                setAccount({ username: response.data.username, name: response.data.name });
+                isUserAuthenticated(true);
+                navigate('/');
+            } else {
+                alert('Username or password is incorrect');
+                return;
+            }
         }
         else {
-            setError('Something Went Wrong !!');
+            alert('Error!');
+            return;
         }
     }
 
@@ -175,11 +181,11 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
                     </Wrapper>
                     :
                     <Wrapper>
-                        <TextField variant="standard" onChange={(e) => onInputChange(e)} label="Enter Your Name" name="name" />
+                        <TextField required variant="filled" onChange={(e) => onInputChange(e)} name="name" label="name" />
 
-                        <TextField variant="standard" onChange={(e) => onInputChange(e)} label="Enter Username" name="username" />
+                        <TextField required variant="filled" onChange={(e) => onInputChange(e)} label="username" name="username" />
 
-                        <TextField variant="standard" onChange={(e) => onInputChange(e)} label="Enter Password" name="password" type="password" />
+                        <TextField required variant="filled" onChange={(e) => onInputChange(e)} label="Enter Password" name="password" type="password" />
 
 
                         {error && <Error>{error}</Error>}
