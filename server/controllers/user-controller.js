@@ -49,7 +49,7 @@ export const loginUser = async (request, response) => {
             response.status(200).json({ status: false, msg: 'Password does not match' })
         }
     } catch (error) {
-        response.status(500).json({ msg: 'error while login the user' })
+        response.status(500).json({ msg: 'error while login the user', error: error.message })
     }
 }
 

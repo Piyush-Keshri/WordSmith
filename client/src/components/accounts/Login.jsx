@@ -111,6 +111,13 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
             return;
         }
 
+        // Password Validation: At least 6 characters long and contains both numbers and alphabets
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+        if (!passwordRegex.test(signup.password)) {
+            alert('Password must be at least 6 characters long and contain both letters and numbers.');
+            return;
+        }
+
         let response = await API.userSignup(signup);
         if (response.isSuccess) {
             setError('');
@@ -202,3 +209,133 @@ const Login = ({ isUserAuthenticated }, { handleLogin }) => {
 }
 
 export default Login;
+
+
+// import { Box, TextField, Button, styled, Typography } from "@mui/material";
+// import { useState, useContext } from "react";
+// import { API } from "../../service/api.js";
+// import { DataContext } from "../../context/DataProvider.jsx";
+// import { useNavigate } from "react-router-dom";
+
+// const Component = styled(Box)`
+//     margin-top:30px;
+//     width:400px;
+//     margin:auto;
+//     box-shadow:5px 2px 5px 2px rgb(0 0 0/0.6);
+// `;
+
+// const Image = styled('img')({
+//     width: 190,
+//     display: "flex",
+//     margin: 'auto',
+// });
+
+// const Wrapper = styled(Box)`
+//     padding:35px 25px;
+//     display:flex;
+//     flex:1;
+//     flex-direction:column;
+//     & > div,& > button,& > p{
+//         margin-top:20px
+//     }
+
+// `;
+
+// const LoginButton = styled(Button)`
+//     background:#FB641B;
+//     height:48px;
+// `;
+
+// const SignUpButton = styled(Button)`
+//     background: #fff;
+//     height : 48px;
+//     box-shadow : 0 2px 4px 0 rgb(0 0 0/20%);
+//     color:#2874f0;
+// `;
+
+// const Error = styled(Typography)`
+//     color:#ff6161;
+//     margin-top:10px;
+//     font-weight:600;
+// `
+
+// const initialValues = {
+//     name: "",
+//     username: "",
+//     password: ""
+// };
+
+// const Login = ({ isUserAuthenticated }) => {
+//     const imageUrl = "https://i.ibb.co/g7GDHq5/logo-no-background.png";
+
+//     const [account, toggleAccount] = useState('login');
+//     const [formData, setFormData] = useState(initialValues);
+//     const [error, setError] = useState('');
+//     const { setAccount } = useContext(DataContext);
+//     const navigate = useNavigate();
+
+//     const toggleSignUp = () => {
+//         toggleAccount(account === 'signup' ? 'login' : 'signup');
+//     };
+
+//     const onInputChange = (e) => {
+//         setFormData({ ...formData, [e.target.name]: e.target.value });
+//     };
+
+//     const handleSubmit = async () => {
+//         try {
+//             if (!formData.username || !formData.password) {
+//                 throw new Error('Please fill in all fields.');
+//             }
+
+//             let response;
+//             if (account === 'login') {
+//                 response = await API.userLogin(formData);
+//                 if (!response.isSuccess || !response.data.status) {
+//                     throw new Error('Username or password is incorrect.');
+//                 }
+//             } else {
+//                 if (Object.values(formData).some(value => !value.trim())) {
+//                     throw new Error('Please enter valid values.');
+//                 }
+//                 response = await API.userSignup(formData);
+//             }
+
+//             sessionStorage.setItem('accessToken', `Bearer ${response.data.accessToken}`);
+//             sessionStorage.setItem('refreshToken', `Bearer ${response.data.refreshToken}`);
+
+//             setAccount({ username: response.data.username, name: response.data.name });
+//             isUserAuthenticated(true);
+//             navigate('/');
+//         } catch (err) {
+//             setError(err.message);
+//         }
+//     };
+
+//     return (
+//         <Component>
+//             <Box>
+//                 <Image src={imageUrl} />
+//                 <Wrapper>
+//                     {account === 'login' ?
+//                         <>
+//                             <TextField required variant="standard" value={formData.username} onChange={onInputChange} name="username" label="Username" />
+//                             <TextField required variant="standard" value={formData.password} onChange={onInputChange} name="password" label="Password" type="password" />
+//                         </>
+//                         :
+//                         <>
+//                             <TextField required variant="filled" onChange={onInputChange} name="name" label="Name" />
+//                             <TextField required variant="filled" onChange={onInputChange} name="username" label="Username" />
+//                             <TextField required variant="filled" onChange={onInputChange} name="password" label="Password" type="password" />
+//                         </>
+//                     }
+//                     {error && <Error>{error}</Error>}
+//                     <LoginButton variant="contained" onClick={handleSubmit}>{account === 'login' ? 'Login' : 'Sign Up'}</LoginButton>
+//                     <SignUpButton onClick={toggleSignUp}>{account === 'login' ? 'Create an Account' : 'Already have an Account'}</SignUpButton>
+//                 </Wrapper>
+//             </Box>
+//         </Component>
+//     );
+// };
+
+// export default Login;
