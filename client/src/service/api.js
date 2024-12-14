@@ -6,7 +6,7 @@ import { getAccessToken, getRefreshToken, setAccessToken, getType } from '../uti
 const API_URL = 'http://localhost:8000';
 
 const axiosInstance = axios.create({
-    baseURL: API_URL,
+    baseURL: import.meta.env.MODE === "development" ? API_URL : "/",
     timeout: 10000,
     headers: {
         "content-type": "application/json"

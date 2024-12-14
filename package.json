@@ -1,0 +1,21 @@
+{
+  "name": "wordsmith",
+  "version": "1.0.0",
+  "description": "<div>\r <h1>WordSmith is a platform designed for both writers and readers, providing a seamless and secure environment for creating and exploring blog posts.</h1>",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
+    "start": "npm run start --prefix server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Piyush-Keshri/WordSmith.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Piyush-Keshri/WordSmith/issues"
+  },
+  "homepage": "https://github.com/Piyush-Keshri/WordSmith#readme"
+}
